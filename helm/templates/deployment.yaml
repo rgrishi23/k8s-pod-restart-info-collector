@@ -51,9 +51,9 @@ spec:
               value: {{ .Values.ignoredPodNamePrefixes | quote}}
             - name: IGNORE_RESTARTS_WITH_EXIT_CODE_ZERO
               value: {{ .Values.ignoreRestartsWithExitCodeZero | quote}}
-            - name: SLACK_WEBHOOK_URL
+            - name: MICROSOFT_TEAMS_WEBHOOK_URL
               valueFrom:
-              {{- include "k8s-pod-restart-info-collector.SlackWebhookUrlSecret" . | indent 14 }}
+              {{- include "k8s-pod-restart-info-collector.MICROSOFT_TEAMS_WEBHOOK_URL" . | indent 14 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
