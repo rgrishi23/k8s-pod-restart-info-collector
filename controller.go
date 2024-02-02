@@ -95,7 +95,14 @@ func (c *Controller) Run(workers int, stopCh chan struct{}) {
 	// Let the workers stop when we are done
 	defer c.queue.ShutDown()
 	klog.Info("Starting controller")
-
+	errmsg1 := MicrosoftTeamsMessage{
+		Summary:  fmt.Sprintf("*K8s-Restart-pod*"),
+		Text:   "FYI!!!!!!",
+		ThemeColor: "#FFD700",
+	}
+	// klog.Infoln(msg.Title + "\n" + msg.Text + "\n" + msg.Footer)
+	//slackChannel := getSlackChannelFromPod(pod)
+	msgerr = c.teams.TeamsSendMessage(errmsg1)
 	// Starts all the shared informers that have been created by the factory so
 	// far.
 	go c.informerFactory.Start(stopCh)
