@@ -30,9 +30,9 @@ type SlackMessage struct {
 func NewSlack() Slack {
 	var slackWebhookUrl, slackChannel, slackUsername, clusterName string
 
-	if slackWebhookUrl = os.Getenv("SLACK_WEBHOOK_URL"); slackWebhookUrl == "" {
-		klog.Exit("Environment variable SLACK_WEBHOOK_URL is not set")
-	}
+	// if slackWebhookUrl = os.Getenv("SLACK_WEBHOOK_URL"); slackWebhookUrl == "" {
+	// 	klog.Exit("Environment variable SLACK_WEBHOOK_URL is not set")
+	// }
 
 	if slackChannel = os.Getenv("SLACK_CHANNEL"); slackChannel == "" {
 		slackChannel = "restart-info-nonprod"
@@ -48,7 +48,7 @@ func NewSlack() Slack {
 		clusterName = "cluster-name"
 		klog.Warningf("Environment variable CLUSTER_NAME is not set, default: %s\n", clusterName)
 	}
-
+	slackWebhookUrl = "https://notfound"
 	muteSeconds, err := strconv.Atoi(os.Getenv("MUTE_SECONDS"))
 	if err != nil {
 		muteSeconds = 600

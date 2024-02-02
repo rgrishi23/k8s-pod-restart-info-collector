@@ -2,7 +2,7 @@
 
 # The CLUSTER_NAME and SLACK_WEBHOOK_URL ENVs are required.
 CLUSTER_NAME=${CLUSTER_NAME:-"CLUSTER_NAME undefine"}
-SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL:-"SLACK_WEBHOOK_URL undefine"} # "https://hooks.slack.com/services/xxxxxx"
+SLACK_WEBHOOK_URL=${MICROSOFT_TEAMS_WEBHOOK_URL:-"SLACK_WEBHOOK_URL undefine"} # "https://hooks.slack.com/services/xxxxxx"
 
 SLACK_CHANNEL=${SLACK_CHANNEL:-"restart-info"}
 SLACK_USERNAME=${SLACK_USERNAME:-"k8s-pod-restart-info-collector"}
