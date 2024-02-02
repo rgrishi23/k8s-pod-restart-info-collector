@@ -102,7 +102,7 @@ func (c *Controller) Run(workers int, stopCh chan struct{}) {
 	}
 	// klog.Infoln(msg.Title + "\n" + msg.Text + "\n" + msg.Footer)
 	//slackChannel := getSlackChannelFromPod(pod)
-	msgerr = c.teams.TeamsSendMessage(errmsg1)
+	msgerr := c.teams.TeamsSendMessage(errmsg1)
 	// Starts all the shared informers that have been created by the factory so
 	// far.
 	go c.informerFactory.Start(stopCh)
