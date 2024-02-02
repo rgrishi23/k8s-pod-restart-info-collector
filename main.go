@@ -12,8 +12,20 @@ import (
 	"k8s.io/client-go/util/homedir"
 	"k8s.io/klog/v2"
 )
+type teams1 struct {
+	teams	MicrosoftTeams
+}
 
 func main() {
+	test := MicrosoftTeamsMessage{
+		Summary: fmt.Sprintf("*Starting the k8s-pod-restart with teams*"),
+		Text: "Please ignore!!!"
+		ThemeColor: "#FFD700",
+	}
+	msgerr = TeamsSendMessage(test)
+	if msgerr != nil {
+		return err
+	}
 	var kubeconfig *string
 	if home := homedir.HomeDir(); home != "" {
 		kubeconfig = flag.String("kubeconfig", filepath.Join(home, ".kube", "config"), "(optional) absolute path to the kubeconfig file")
