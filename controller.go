@@ -28,14 +28,14 @@ const (
 
 type Controller struct {
 	clientset       kubernetes.Interface
-	slack           Slack
+	teams           MicrosoftTeams
 	informerFactory informers.SharedInformerFactory
 	podInformer     coreinformers.PodInformer
 	queue           workqueue.RateLimitingInterface
 }
 
 // NewController creates a new Controller.
-func NewController(clientset kubernetes.Interface, slack Slack) *Controller {
+func NewController(clientset kubernetes.Interface, teams MicrosoftTeams) *Controller {
 	const resyncPeriod = 0
 	ignoreRestartCount := getIgnoreRestartCount()
 
@@ -85,7 +85,7 @@ func NewController(clientset kubernetes.Interface, slack Slack) *Controller {
 		informerFactory: informerFactory,
 		podInformer:     podInformer,
 		queue:           queue,
-		slack:           slack,
+		teams:           teams,
 	}
 }
 
@@ -205,8 +205,8 @@ func (c *Controller) handlePod(pod *v1.Pod) error {
 	podKey := pod.Namespace + "/" + pod.Name
 
 	currentTime := time.Now().Local()
-	if lastSentTime, ok := c.slack.History[podKey]; ok {
-		if int(currentTime.Sub(lastSentTime).Seconds()) < c.slack.MuteSeconds {
+	if lastSentTime, ok := c.teams.History[podKey]; ok {
+		if int(currentTime.Sub(lastSentTime).Seconds()) < c.teams.MuteSeconds {
 			klog.Infof("Skip: %s, already sent %s ago.\n", podKey, duration.HumanDuration(time.Since(lastSentTime)))
 			return nil
 		}
@@ -274,20 +274,20 @@ func (c *Controller) handlePod(pod *v1.Pod) error {
 			containerLogs = fmt.Sprintf("• Pod Logs Before Restart\n```\n%s```\n", containerLogs)
 		}
 
-		msg := SlackMessage{
-			Title:  fmt.Sprintf("*Pod restarted!*\n*cluster: `%s`, pod: `%s`, namespace: `%s`*", c.slack.ClusterName, pod.Name, pod.Namespace),
+		msg := MicrosoftTeamsMessage{
+			Summary:  fmt.Sprintf("*Pod restarted!*\n*cluster: `%s`, pod: `%s`, namespace: `%s`*", c.teams.ClusterName, pod.Name, pod.Namespace),
 			Text:   podStatus + podEvents + nodeEvents + containerLogs,
-			Footer: fmt.Sprintf("%s, %s, %s", c.slack.ClusterName, pod.Name, pod.Namespace),
+			ThemeColor: "#FFD700",
 		}
 		// klog.Infoln(msg.Title + "\n" + msg.Text + "\n" + msg.Footer)
-		slackChannel := getSlackChannelFromPod(pod)
-		err = c.slack.sendToChannel(msg, slackChannel)
+		//slackChannel := getSlackChannelFromPod(pod)
+		err = c.teams.TeamsSendMessage(msg)
 		if err != nil {
 			return err
 		}
 
-		c.slack.History[podKey] = currentTime
-		c.cleanOldSlackHistory()
+		c.teams.History[podKey] = currentTime
+		c.cleanOldTeamsHistory()
 		break
 	}
 	return nil
@@ -365,23 +365,23 @@ func (c *Controller) getContainerLogs(pod *v1.Pod, containerStatus v1.ContainerS
 	return out, err
 }
 
-// cleanOldSlackHistory deletes old pod name from the c.slack.History.
-func (c *Controller) cleanOldSlackHistory() {
+// cleanOldTeamsHistory deletes old pod name from the c.teams.History.
+func (c *Controller) cleanOldTeamsHistory() {
 	currentTime := time.Now().Local()
-	for pod, lastSentTime := range c.slack.History {
+	for pod, lastSentTime := range c.teams.History {
 		if currentTime.Sub(lastSentTime).Hours() > 1 {
-			delete(c.slack.History, pod)
+			delete(c.teams.History, pod)
 		}
 	}
 }
 
 // getSlackChannelFromPod gets custom slack channel from pod annotations or labels.
-func getSlackChannelFromPod(pod *v1.Pod) string {
-	if slackChannel, ok := pod.GetAnnotations()[SlackChannelKey]; ok {
-		return slackChannel
-	}
-	if slackChannel, ok := pod.GetLabels()[SlackChannelKey]; ok {
-		return slackChannel
-	}
-	return ""
-}
+// func getSlackChannelFromPod(pod *v1.Pod) string {
+// 	if slackChannel, ok := pod.GetAnnotations()[SlackChannelKey]; ok {
+// 		return slackChannel
+// 	}
+// 	if slackChannel, ok := pod.GetLabels()[SlackChannelKey]; ok {
+// 		return slackChannel
+// 	}
+// 	return ""
+// }
