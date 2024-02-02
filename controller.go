@@ -280,7 +280,7 @@ func (c *Controller) handlePod(pod *v1.Pod) error {
 		}
 		// klog.Infoln(msg.Title + "\n" + msg.Text + "\n" + msg.Footer)
 		//slackChannel := getSlackChannelFromPod(pod)
-		err = c.teams.teamsSendMessage(msg)
+		err = c.teams.TeamsSendMessage(msg)
 		if err != nil {
 			return err
 		}
