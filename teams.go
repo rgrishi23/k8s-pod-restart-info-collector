@@ -36,7 +36,7 @@ func NewMicrosoftTeams() MicrosoftTeams {
 	}
 }
 
-func (m MicrosoftTeams) TeamsSendMessage(msg MicrosoftTeamsMessage) error {
+func (m MicrosoftTeams) teamsSendMessage(msg MicrosoftTeamsMessage) error {
 	client := &http.Client{}
 	body, err := json.Marshal(msg)
 	if err != nil {
