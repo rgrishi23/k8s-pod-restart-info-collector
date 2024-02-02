@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"path/filepath"
-	"fmt"
+
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
 
 	"k8s.io/client-go/kubernetes"
