@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"path/filepath"
-
+	"fmt"
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
 
 	"k8s.io/client-go/kubernetes"
@@ -21,7 +21,7 @@ func main() {
 	}
 	// klog.Infoln(msg.Title + "\n" + msg.Text + "\n" + msg.Footer)
 	//slackChannel := getSlackChannelFromPod(pod)
-	errmsg := TeamsSendMessage(msgtest)
+	//TeamsSendMessage(msgtest)
 	var kubeconfig *string
 	if home := homedir.HomeDir(); home != "" {
 		kubeconfig = flag.String("kubeconfig", filepath.Join(home, ".kube", "config"), "(optional) absolute path to the kubeconfig file")
