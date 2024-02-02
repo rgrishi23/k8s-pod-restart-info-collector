@@ -105,8 +105,7 @@ func (c *Controller) Run(workers int, stopCh chan struct{}) {
 	msgerr := c.teams.TeamsSendMessage(errmsg1)
 	if msgerr != nil {
 		klog.Info("Worked")
-	}
-	else{
+	} else {
 		klog.Info(msgerr)
 	}
 	// Starts all the shared informers that have been created by the factory so
