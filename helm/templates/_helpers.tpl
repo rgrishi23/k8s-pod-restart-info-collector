@@ -65,10 +65,10 @@ Create the name of the service account to use
 {{/*
 Use existing secret or create one based on slackWebhookUrl
 */}}
-{{- define "k8s-pod-restart-info-collector.SlackWebhookUrlSecret" -}}
+{{- define "k8s-pod-restart-info-collector.MICROSOFT_TEAMS_WEBHOOK_URL" -}}
 {{- if not .Values.slackWebhookUrlSecretKeyRef }}
   secretKeyRef:
-    key: slackWebhookUrl
+    key: MICROSOFT_TEAMS_WEBHOOK_URL
     name: {{ include "k8s-pod-restart-info-collector.fullname" . }}
 {{- else }}
   secretKeyRef:
