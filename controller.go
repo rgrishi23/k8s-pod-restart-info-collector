@@ -38,7 +38,6 @@ type Controller struct {
 func NewController(clientset kubernetes.Interface, teams MicrosoftTeams) *Controller {
 	const resyncPeriod = 0
 	ignoreRestartCount := getIgnoreRestartCount()
-
 	queue := workqueue.NewRateLimitingQueue(workqueue.DefaultControllerRateLimiter())
 	informerFactory := informers.NewSharedInformerFactory(clientset, resyncPeriod)
 	podInformer := informerFactory.Core().V1().Pods()

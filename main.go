@@ -14,15 +14,14 @@ import (
 )
 
 func main() {
-	// test := MicrosoftTeamsMessage{
-	// 	Summary: fmt.Sprintf("*Starting the k8s-pod-restart with teams*"),
-	// 	Text: "Please ignore!!!"
-	// 	ThemeColor: "#FFD700",
-	// }
-	// msgerr = TeamsSendMessage(test)
-	// if msgerr != nil {
-	// 	return err
-	// }
+	msgtest := MicrosoftTeamsMessage{
+		Summary:  fmt.Sprintf("*Starting the K8s-pod-restart!!*"),
+		Text:   "FYI!!!!!",
+		ThemeColor: "#FFD700",
+	}
+	// klog.Infoln(msg.Title + "\n" + msg.Text + "\n" + msg.Footer)
+	//slackChannel := getSlackChannelFromPod(pod)
+	errmsg := TeamsSendMessage(msgtest)
 	var kubeconfig *string
 	if home := homedir.HomeDir(); home != "" {
 		kubeconfig = flag.String("kubeconfig", filepath.Join(home, ".kube", "config"), "(optional) absolute path to the kubeconfig file")
